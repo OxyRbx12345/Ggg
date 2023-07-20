@@ -1,0 +1,77 @@
+local gui = Instance.new("ScreenGui")
+gui.Parent = game.Players.LocalPlayer.PlayerGui
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 200, 0, 100)
+frame.Position = UDim2.new(0.5, -100, 0.5, -50)
+frame.BackgroundColor3 = Color3.fromRGB(64, 64, 64) -- Dark grey background color (RGB values: 64, 64, 64)
+frame.BorderSizePixel = 2
+frame.BorderColor3 = Color3.new(0, 0, 0)
+frame.Parent = gui
+
+local closeButton = Instance.new("TextButton")
+closeButton.Text = "X" -- Close button will be displayed as an 'X'
+closeButton.Size = UDim2.new(0, 25, 0, 25)
+closeButton.Position = UDim2.new(1, -25, 0, 0) -- Top-right corner
+closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Red button color (RGB values: 255, 0, 0)
+closeButton.TextColor3 = Color3.new(1, 1, 1) -- White text color
+closeButton.Parent = frame
+
+local speedText = Instance.new("TextLabel")
+speedText.Text = "Speed"
+speedText.Size = UDim2.new(0, 150, 0, 30)
+speedText.Position = UDim2.new(0.5, -75, 0, 5) -- Moved the number slightly down
+speedText.BackgroundColor3 = Color3.fromRGB(30, 30, 30) -- Darker grey button color (RGB values: 40, 40, 40)
+speedText.TextColor3 = Color3.new(1, 1, 1) -- White text color
+speedText.Parent = frame
+
+local buttonSize = UDim2.new(0, 30, 0, 30)
+local buttonPadding = 10 -- Padding between the buttons and the speedText
+local totalButtonsWidth = buttonSize.X.Offset * 2 + buttonPadding
+
+local number = 0 -- Variable to keep track of the number
+
+local numberText = Instance.new("TextLabel")
+numberText.Text = tostring(number)
+numberText.Size = UDim2.new(0, 30, 0, 30)
+numberText.Position = UDim2.new(0.5, -15, 0.6, 0) -- Slightly down from the center
+numberText.BackgroundColor3 = Color3.fromRGB(40, 40, 40) -- Darker grey button color (RGB values: 64, 64, 64)
+numberText.TextColor3 = Color3.new(1, 1, 1) -- White text color
+numberText.Parent = frame
+
+local increaseButton = Instance.new("TextButton")
+increaseButton.Text = "+"
+increaseButton.Size = buttonSize
+increaseButton.Position = UDim2.new(0.5, totalButtonsWidth / 2, 0.6, 0)
+increaseButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40) -- Darker grey button color (RGB values: 64, 64, 64)
+increaseButton.TextColor3 = Color3.new(1, 1, 1) -- White text color
+increaseButton.Parent = frame
+
+local decreaseButton = Instance.new("TextButton")
+decreaseButton.Text = "-"
+decreaseButton.Size = buttonSize
+decreaseButton.Position = UDim2.new(0.5, -(totalButtonsWidth / 2) - buttonSize.X.Offset, 0.6, 0)
+decreaseButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40) -- Darker grey button color (RGB values: 64, 64, 64)
+decreaseButton.TextColor3 = Color3.new(1, 1, 1) -- White text color
+decreaseButton.Parent = frame
+
+local function updateNumber()
+    if number < 0 then
+        number = 0
+    end
+    numberText.Text = tostring(number)
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = number -- Update player's walkspeed based on the number
+end
+
+increaseButton.MouseButton1Click:Connect(function()
+    number = number + 1 -- Increase the number by 1
+    updateNumber()
+end)
+
+decreaseButton.MouseButton1Click:Connect(function()
+    number = number - 1 -- Decrease the number by 1
+    updateNumber()
+end)
+
+-- Function to close the GUI when the close button is clicked
+closeButton
