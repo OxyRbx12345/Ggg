@@ -74,4 +74,45 @@ decreaseButton.MouseButton1Click:Connect(function()
 end)
 
 -- Function to close the GUI when the close button is clicked
-closeButton
+closeButton.MouseButton1Click:Connect(function()
+    gui:Destroy()
+end)
+
+local isDragging = false
+local offset = Vector2.new(0, 0)
+
+local function startDrag(input)
+    isDragging = true
+    offset = frame.Position - UDim2.new(0, input.Position.X, 0, input.Position.Y)
+    game:GetService("UserInputService").MouseIconEnabled = false -- Disable mouse icon
+end
+
+local function endDrag()
+    isDragging = false
+    game:GetService("UserInputService").MouseIconEnabled = true -- Enable mouse icon
+end
+
+local function drag(input)
+    if isDragging then
+        if input.UserInputType == Enum.UserInputType.MouseMovement then
+            frame.Position = UDim2.new(0, input.Position.X, 0, input.Position.Y) + offset
+        elseif input.UserInputType == Enum.UserInputType.Touch then
+            local touchPosition = input.Position
+            frame.Position = UDim2.new(0, touchPosition.X, 0, touchPosition.Y) + offset
+        end
+    end
+end
+
+frame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        startDrag(input)
+    end
+end)
+
+frame.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        endDrag()
+    end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(drag)
